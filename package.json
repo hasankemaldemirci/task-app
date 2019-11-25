@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/canyener/task-api-kata#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "mongoose": "^5.7.10"
   }
 }
