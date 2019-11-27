@@ -11,10 +11,20 @@ const Task = require("./models/task")
 
 app.post("/tasks", async (req, res) => {
   try {
-    const task = await new Task(req.body).save()
+    const task = new Task(req.body)
+    await task.save()
     res.status(201).send(task)
   } catch (err) {
     res.status(400).send(err)
+  }
+})
+
+app.get("/tasks", async (req, res) => {
+  try {
+    const tasks = await Task.find({})
+    res.status(200).send(tasks)
+  } catch (err) {
+    res.status(500)
   }
 })
 
