@@ -4,8 +4,11 @@ const port = process.env.PORT || 3000
 
 app.use(express.json())
 
-app.post("/tasks", (req, res) => {
-  res.status(201).send(req.body)
-})
+require("./db/mongoose")
+
+// Routers
+const tasks = require("./routers/tasks")
+
+app.use("/tasks", tasks)
 
 app.listen(port, () => console.log(`App is listening on port ${port}!`))
