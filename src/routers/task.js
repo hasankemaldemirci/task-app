@@ -1,9 +1,10 @@
-const express = require("express")
-const router = express.Router()
+const express = require('express')
 
-const Task = require("../models/task")
+const Task = require('../models/task')
 
-router.post("/", async (req, res) => {
+const router = new express.Router()
+
+router.post('/', async (req, res) => {
   try {
     const task = new Task(req.body)
     await task.save()
@@ -13,22 +14,24 @@ router.post("/", async (req, res) => {
   }
 })
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const tasks = await Task.find({})
     res.status(200).send(tasks)
   } catch (err) {
-    res.status(500)
+    res.status(500).send()
   }
 })
 
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id)
     res.status(200).send(task)
   } catch (err) {
-    res.status(500)
+    res.status(500).send()    
   }
 })
 
 module.exports = router
+
+
