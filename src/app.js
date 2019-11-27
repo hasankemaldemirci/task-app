@@ -28,4 +28,13 @@ app.get("/tasks", async (req, res) => {
   }
 })
 
+app.get("/tasks/:id", async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id)
+    res.status(200).send(task)
+  } catch (err) {
+    res.status(500)
+  }
+})
+
 app.listen(port, () => console.log(`App is listening on port ${port}!`))
