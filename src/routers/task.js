@@ -40,9 +40,9 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).send()
     }
 
-    res.status(200).send(task)    
-  } catch (err) {
-    res.status(404).send()
+    res.send(task)
+  } catch (_err) {
+    res.status(500).send()
   }
 })
 
