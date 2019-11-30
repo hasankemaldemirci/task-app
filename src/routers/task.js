@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
     const task = await Task.findById(req.params.id)
     res.status(200).send(task)
   } catch (err) {
-    res.status(500).send()    
+    res.status(500).send()
   }
 })
 
@@ -46,6 +46,29 @@ router.delete('/:id', async (req, res) => {
   }
 })
 
+router.patch('/:id', async (req, res) => {
+  try {
+    const requestedUpdateKeys = Object.keys(req.body)
+    const validUpdateKeys = ['description', 'completed']
+    const isValidUpdate = requestedUpdateKeys.every(key => validUpdateKeys.includes(key))
+  
+    if (!isValidUpdate) {
+      return res.status(400).send({ error: 'Invalid updates!' })
+    }
+  
+    const task = await Task.findById(req.params.id)
+  
+    if (!task) {
+      return res.status(404).send()
+    }
+  
+    requestedUpdateKeys.forEach(key => task[key] = req.body[key])
+  
+    await task.save()
+    res.send(task)
+  } catch (err) {
+    res.status(400).send(err)
+  }
+})
+
 module.exports = router
-
-
