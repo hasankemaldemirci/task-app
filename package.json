@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/app.js",
-    "dev": "nodemon ./src/app.js"
+    "dev": "env-cmd -f ./src/config/dev.env nodemon ./src/app.js",
+    "test": "env-cmd -f ./src/config/test.env nodemon ./src/app.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "mongoose": "^5.7.10"
   },
   "devDependencies": {
+    "env-cmd": "^10.0.1",
     "nodemon": "^2.0.1"
   }
 }
