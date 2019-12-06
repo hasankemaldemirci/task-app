@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
     const task = await Task.findById(req.params.id)
 
     if (!task) {
-      return res.status(404).send({ error: 'Task not found!' })
+      return res.status(404).send()
     }
 
     res.status(200).send(task)
