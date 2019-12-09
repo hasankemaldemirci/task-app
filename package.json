@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node ./src/app.js",
     "dev": "env-cmd -f ./config/dev.env nodemon ./src/app.js",
-    "test": "env-cmd -f ./config/test.env nodemon ./src/app.js"
+    "test": "jest --watch"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true
   },
   "repository": {
     "type": "git",
@@ -25,6 +29,7 @@
   },
   "devDependencies": {
     "env-cmd": "^10.0.1",
+    "jest": "^24.9.0",
     "nodemon": "^2.0.1"
   }
 }
