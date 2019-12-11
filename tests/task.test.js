@@ -25,27 +25,30 @@ describe('POST /tasks', () => {
   })
 
   test('Should return correct object in response', async () => {
-    await request(app)
+    const response = await request(app)
       .post('/tasks')
       .send({
         description: 'Test task correct object'
       })
-      .expect(res => {
-        const actual = res.body.description
-        expect(actual).toEqual('Test task correct object')
-      })
+
+      const expected = {
+        description: 'Test task correct object',
+        completed: false
+      }
+
+      expect(response.body).toMatchObject(expected)
   })
 
   test('Should return validation error message with empty description', async () => {
-    await request(app)
+    const response = await request(app)
       .post('/tasks')
       .send({
         description: ''
       })
-      .expect(res => {
-        const actual = res.body.message
-        const expected = 'Task validation failed: description: Path `description` is required.'
-        expect(actual).toEqual(expected)
-      })
+
+      const actualMessage = response.body.message
+      const expectedMessage = 'Task validation failed: description: Path `description` is required.'
+
+      expect(actualMessage).toEqual(expectedMessage)
   })
 })
