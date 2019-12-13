@@ -3,6 +3,12 @@ const app = require('../src/app')
 
 const Task = require('../src/models/task')
 
+const setupDatabase = require('./fixtures/db')
+
+beforeEach(() => {
+  setupDatabase()
+})
+
 describe('POST /tasks', () => {
   test('Should return 201 with valid request', async () => {
     await request(app)
