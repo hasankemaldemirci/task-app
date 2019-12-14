@@ -5,7 +5,7 @@ const Task = require('../src/models/task')
 
 const { setupDatabase } = require('./fixtures/db')
 
-beforeEach(() => setupDatabase())
+beforeEach(setupDatabase)
 
 describe('POST /tasks', () => {
   test('Should return 201 with valid request', async () => {
