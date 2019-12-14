@@ -4,4 +4,6 @@ const setupDatabase = async () => {
   await Task.deleteMany({})
 }
 
-module.exports = setupDatabase
+module.exports = {
+  setupDatabase
+}
