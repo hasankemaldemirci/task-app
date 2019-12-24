@@ -31,4 +31,27 @@ describe('POST /tasks', () => {
 
       expect(response.body).toMatchObject(expected)
   })
+
+  test('Should return 400 with empty request', async () => {
+    await request(app)
+      .post('/tasks')
+      .send()
+      .expect(400)
+  })
+
+  test('Should return 400 with empty object', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({})
+      .expect(400)
+  })
+
+  test('Should return 400 with empty description', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: ''
+      })
+      .expect(400)
+  })
 })
