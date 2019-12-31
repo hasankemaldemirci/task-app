@@ -65,7 +65,7 @@ describe('POST /tasks', () => {
         completed: false
       })
 
-      const task = await Task.findOne({ completed: false })
+      const task = await Task.findOne({ description: 'Valid task three' })
 
       expect(task.completed).toEqual(false)
   })
@@ -102,7 +102,7 @@ describe('POST /tasks', () => {
       expect(response.body.message).toEqual(expected)
   })
 
-  test('Should return specific error message in response is completed empty', async () => {
+  test('Should return specific error message in response if completed is empty string', async () => {
     const response = await request(app)
       .post('/tasks')
       .send({
