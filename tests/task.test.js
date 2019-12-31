@@ -13,7 +13,7 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task one'
+        description: 'Test task description'
       })
       .expect(201)
   })
@@ -22,12 +22,12 @@ describe('POST /tasks', () => {
     const response = await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task two',
+        description: 'Test task description',
         completed: true
       })
       
       const expected = {
-        description: 'Valid task two',
+        description: 'Test task description',
         completed: true
       }
 
@@ -61,11 +61,11 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task three',
+        description: 'Test task description',
         completed: false
       })
 
-      const task = await Task.findOne({ description: 'Valid task three' })
+      const task = await Task.findOne({ description: 'Test task description' })
 
       expect(task.completed).toEqual(false)
   })
@@ -106,7 +106,7 @@ describe('POST /tasks', () => {
     const response = await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task four',
+        description: 'Test task description',
         completed: ''
       })
       
@@ -119,7 +119,7 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task five',
+        description: 'Test task description',
         completed: 1
       })
       .expect(201)
@@ -129,7 +129,7 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task six',
+        description: 'Test task description',
         completed: 0
       })
       .expect(201)
@@ -139,11 +139,11 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task seven',
+        description: 'Test task description',
         completed: 1
       })
 
-      const task = await Task.findOne({ description: 'Valid task seven' })
+      const task = await Task.findOne({ description: 'Test task description' })
 
       expect(task.completed).toEqual(true)
   })
@@ -152,11 +152,11 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task eight',
+        description: 'Test task description',
         completed: 0
       })
 
-      const task = await Task.findOne({ description: 'Valid task eight' })
+      const task = await Task.findOne({ description: 'Test task description' })
 
       expect(task.completed).toEqual(false)
   })
@@ -174,7 +174,7 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: {'key': 'value'}
+        description: {key: 'value'}
       })
       .expect(400)
   })
@@ -195,7 +195,7 @@ describe('POST /tasks', () => {
     const response = await request(app)
       .post('/tasks')
       .send({
-        description: {'key': 'value'}
+        description: {key: 'value'}
       })
 
       const expected = `Task validation failed: description: Cast to String failed for value \"{ key: 'value' }\" at path \"description\"`
@@ -207,7 +207,7 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task nine',
+        description: 'Test task description',
         completed: ['string', 'string']
       })
       .expect(400)
@@ -217,8 +217,8 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task ten',
-        completed: {'key': 'value'}
+        description: 'Test task description',
+        completed: {key: 'value'}
       })
       .expect(400)
   })
@@ -227,7 +227,7 @@ describe('POST /tasks', () => {
     const response = await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task eleven',
+        description: 'Test task description',
         completed: ['string', 'string']
       })
 
@@ -240,8 +240,8 @@ describe('POST /tasks', () => {
     const response = await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task twelve',
-        completed: {'key': 'value'}
+        description: 'Test task description',
+        completed: {key: 'value'}
       })
 
       const expected = `Task validation failed: completed: Cast to Boolean failed for value \"{ key: 'value' }\" at path \"completed\"`
