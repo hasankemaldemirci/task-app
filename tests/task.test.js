@@ -13,7 +13,7 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task one'
+        description: 'Test task description'
       })
       .expect(201)
   })
@@ -22,12 +22,12 @@ describe('POST /tasks', () => {
     const response = await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task two',
+        description: 'Test task description',
         completed: true
       })
       
       const expected = {
-        description: 'Valid task two',
+        description: 'Test task description',
         completed: true
       }
 
@@ -61,11 +61,11 @@ describe('POST /tasks', () => {
     await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task three',
+        description: 'Test task description',
         completed: false
       })
 
-      const task = await Task.findOne({ description: 'Valid task three' })
+      const task = await Task.findOne({ description: 'Test task description' })
 
       expect(task.completed).toEqual(false)
   })
@@ -106,11 +106,145 @@ describe('POST /tasks', () => {
     const response = await request(app)
       .post('/tasks')
       .send({
-        description: 'Valid task four',
+        description: 'Test task description',
         completed: ''
       })
       
       const expected = 'Task validation failed: completed: Cast to Boolean failed for value \"\" at path \"completed\"'
+
+      expect(response.body.message).toEqual(expected)
+  })
+
+  test('Should return 201 when completed set to 1', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: 'Test task description',
+        completed: 1
+      })
+      .expect(201)
+  })
+
+  test('Should return 201 when completed set to 0', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: 'Test task description',
+        completed: 0
+      })
+      .expect(201)
+  })
+
+  test('Should save task with completed true when completed set to 1', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: 'Test task description',
+        completed: 1
+      })
+
+      const task = await Task.findOne({ description: 'Test task description' })
+
+      expect(task.completed).toEqual(true)
+  })
+
+  test('Should save task with completed false when completed set to 0', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: 'Test task description',
+        completed: 0
+      })
+
+      const task = await Task.findOne({ description: 'Test task description' })
+
+      expect(task.completed).toEqual(false)
+  })
+
+  test('Should return 400 if description is array', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: ['string', 'string']
+      })
+      .expect(400)
+  })
+
+  test('Should return 400 if description is object', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: {key: 'value'}
+      })
+      .expect(400)
+  })
+
+  test('Should return specific error message in response if description is array', async () => {
+    const response = await request(app)
+      .post('/tasks')
+      .send({
+        description: ['string', 'string']
+      })
+
+      const expected = `Task validation failed: description: Cast to String failed for value \"[ 'string', 'string' ]\" at path \"description\"`
+
+      expect(response.body.message).toEqual(expected)
+  })
+
+  test('Should return specific error message in response if description is object', async () => {
+    const response = await request(app)
+      .post('/tasks')
+      .send({
+        description: {key: 'value'}
+      })
+
+      const expected = `Task validation failed: description: Cast to String failed for value \"{ key: 'value' }\" at path \"description\"`
+
+      expect(response.body.message).toEqual(expected)
+  })
+
+  test('Should return 400 if completed is array', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: 'Test task description',
+        completed: ['string', 'string']
+      })
+      .expect(400)
+  })
+
+    test('Should return 400 if completed is object', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: 'Test task description',
+        completed: {key: 'value'}
+      })
+      .expect(400)
+  })
+
+  test('Should return specific error message in response if completed is array', async () => {
+    const response = await request(app)
+      .post('/tasks')
+      .send({
+        description: 'Test task description',
+        completed: ['string', 'string']
+      })
+
+      const expected = `Task validation failed: completed: Cast to Boolean failed for value \"[ 'string', 'string' ]\" at path \"completed\"`
+
+      expect(response.body.message).toEqual(expected)
+  })
+
+  test('Should return specific error message in response if completed is object', async () => {
+    const response = await request(app)
+      .post('/tasks')
+      .send({
+        description: 'Test task description',
+        completed: {key: 'value'}
+      })
+
+      const expected = `Task validation failed: completed: Cast to Boolean failed for value \"{ key: 'value' }\" at path \"completed\"`
 
       expect(response.body.message).toEqual(expected)
   })
