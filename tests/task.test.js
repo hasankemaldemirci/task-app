@@ -251,7 +251,7 @@ describe('POST /tasks', () => {
 })
 
 describe('DELETE /tasks/:id', () => {
-  test('Should return 200 when task deleted from db', async () => {
+  test('Should return 200 when task is deleted', async () => {
     await request(app)
       .delete(`/tasks/${taskOne._id}`)
       .send()
