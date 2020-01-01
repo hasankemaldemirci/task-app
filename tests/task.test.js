@@ -271,15 +271,17 @@ describe('POST /tasks', () => {
       expect(task).toBeFalsy()
   })
 
-  test('Should ignore invalid fields in request', async () => {
-    const response = await request(app)
+  test('Should ignore invalid fields', async () => {
+    await request(app)
       .post('/tasks')
       .send({
         description: 'Test task description',
         invalidField: true
       })
 
-      expect(response.body.invalidField).toBeFalsy()
+      const task = await Task.findOne({ description: 'Test task description' })
+
+      expect(task.invalidField).toBeFalsy()
   })
 
   test('Should NOT save task with invalid completed property to database', async () => {
