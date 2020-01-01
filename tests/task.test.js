@@ -248,4 +248,52 @@ describe('POST /tasks', () => {
 
       expect(response.body.message).toEqual(expected)
   })
+
+  test('Should NOT save empty object to database', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({})
+
+      const task = await Task.findOne()
+
+      expect(task).toBeFalsy()
+  })
+
+  test('Should NOT save task with empty description to database', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: ''
+      })
+
+      const task = await Task.findOne({ description: '' })
+
+      expect(task).toBeFalsy()
+  })
+
+  test('Should ignore invalid fields', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: 'Test task description',
+        invalidField: true
+      })
+
+      const task = await Task.findOne({ description: 'Test task description' })
+
+      expect(task.invalidField).toBeFalsy()
+  })
+
+  test('Should NOT save task with invalid completed property to database', async () => {
+    await request(app)
+      .post('/tasks')
+      .send({
+        description: 'Test task description',
+        completed: 'invalid'
+      })
+
+      const task = await Task.findOne({ description: 'Test task description' })
+
+      expect(task).toBeFalsy()
+  })
 })
