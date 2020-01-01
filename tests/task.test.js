@@ -4,7 +4,7 @@ const app = require('../src/app')
 
 const Task = require('../src/models/task')
 
-const { setupDatabase } = require('./fixtures/db')
+const { taskOne, setupDatabase } = require('./fixtures/db')
 
 beforeEach(setupDatabase)
 
@@ -247,5 +247,14 @@ describe('POST /tasks', () => {
       const expected = `Task validation failed: completed: Cast to Boolean failed for value \"{ key: 'value' }\" at path \"completed\"`
 
       expect(response.body.message).toEqual(expected)
+  })
+})
+
+describe('DELETE /tasks/:id', () => {
+  test('Should return 200 when task deleted from db', async () => {
+    await request(app)
+      .delete(`/tasks/${taskOne._id}`)
+      .send()
+      .expect(200)
   })
 })
