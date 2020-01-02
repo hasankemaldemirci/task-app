@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const Task = require('../../src/models/task')
 
 const taskOne = {
-  _id: new mongoose.Types.ObjectId,
+  _id: new mongoose.Types.ObjectId(),
   completed: false,
   description: 'Seed task one'
 }
