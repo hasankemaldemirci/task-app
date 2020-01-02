@@ -4,7 +4,7 @@ const app = require('../src/app')
 
 const Task = require('../src/models/task')
 
-const { taskOne, setupDatabase } = require('./fixtures/db')
+const { taskOne, validObjectId, setupDatabase } = require('./fixtures/db')
 
 beforeEach(setupDatabase)
 
@@ -304,5 +304,33 @@ describe('DELETE /tasks/:id', () => {
       .delete(`/tasks/${taskOne._id}`)
       .send()
       .expect(200)
+  })
+
+  test('Should return 404 with valid object id that is not in database', async () => {
+    await request(app)
+      .delete(`/tasks/${validObjectId}`)
+      .send()
+      .expect(404)
+  })
+
+  test('Should return deleted task in response', async () => {
+    const response = await request(app)
+      .delete(`/tasks/${taskOne._id}`)
+      .send()
+      
+      const task = {
+        _id: `${taskOne._id}`,
+        completed: false,
+        description: 'Seed task one'
+      }
+
+      expect(response.body._id).toEqual(task._id)
+  })
+
+  test('Should return 500 with invalid object id', async () => {
+    await request(app)
+      .delete('/tasks/123456')
+      .send()
+      .expect(500)
   })
 })
