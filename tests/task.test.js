@@ -314,17 +314,19 @@ describe('DELETE /tasks/:id', () => {
   })
 
   test('Should return deleted task in response', async () => {
+    const task = await Task.findById(taskOne._id)
+
+    const expectedResponse = {
+      _id: task._id.toHexString(),
+      description: task.description,
+      completed: task.completed
+    }
+
     const response = await request(app)
       .delete(`/tasks/${taskOne._id}`)
       .send()
       
-      const task = {
-        _id: `${taskOne._id}`,
-        completed: false,
-        description: 'Seed task one'
-      }
-
-      expect(response.body._id).toEqual(task._id)
+      expect(response.body).toMatchObject(expectedResponse)
   })
 
   test('Should return 500 with invalid object id', async () => {
