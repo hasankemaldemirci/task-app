@@ -4,7 +4,7 @@ const app = require('../src/app')
 
 const Task = require('../src/models/task')
 
-const { setupDatabase } = require('./fixtures/db')
+const { taskOne, setupDatabase } = require('./fixtures/db')
 
 beforeEach(setupDatabase)
 
@@ -254,9 +254,9 @@ describe('POST /tasks', () => {
       .post('/tasks')
       .send({})
 
-      const task = await Task.findOne()
+      const tasks = await Task.find({})
 
-      expect(task).toBeFalsy()
+      expect(tasks.length).toEqual(1)
   })
 
   test('Should NOT save task with empty description to database', async () => {
@@ -295,5 +295,14 @@ describe('POST /tasks', () => {
       const task = await Task.findOne({ description: 'Test task description' })
 
       expect(task).toBeFalsy()
+  })
+})
+
+describe('DELETE /tasks/:id', () => {
+  test('Should return 200 when task is deleted', async () => {
+    await request(app)
+      .delete(`/tasks/${taskOne._id}`)
+      .send()
+      .expect(200)
   })
 })
