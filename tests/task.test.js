@@ -336,3 +336,20 @@ describe('DELETE /tasks/:id', () => {
       .expect(500)
   })
 })
+
+describe('GET /tasks', () => {
+  test('Should return 200 with valid request', async () => {
+    await request(app)
+      .get('/tasks')
+      .send()
+      .expect(200)
+  })
+
+  test('Should return array in response with valid request', async () => {
+    const response = await request(app)
+      .get('/tasks')
+      .send()
+
+      expect(Array.isArray(response.body)).toBe(true)
+  })
+})
