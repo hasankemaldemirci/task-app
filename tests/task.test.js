@@ -338,7 +338,7 @@ describe('DELETE /tasks/:id', () => {
 })
 
 describe('GET /tasks', () => {
-  test('Should return 200 with valid request', async () => {
+  test('Should return 200', async () => {
     await request(app)
       .get('/tasks')
       .send()
@@ -350,6 +350,8 @@ describe('GET /tasks', () => {
       .get('/tasks')
       .send()
 
-      expect(Array.isArray(response.body)).toBe(true)
+      const actual = Array.isArray(response.body)
+
+      expect(actual).toBe(true)
   })
 })
