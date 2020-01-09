@@ -8,15 +8,23 @@ const taskOne = {
   description: 'Seed task one'
 }
 
+const taskTwo = {
+  _id: new mongoose.Types.ObjectId(),
+  completed: true,
+  description: 'Seed task two'
+}
+
 const validObjectId = new mongoose.Types.ObjectId();
 
 const setupDatabase = async () => {
   await Task.deleteMany({})
   await new Task(taskOne).save()
+  await new Task(taskTwo).save()
 }
 
 module.exports = {
   taskOne,
+  taskTwo,
   validObjectId,
   setupDatabase
 }
