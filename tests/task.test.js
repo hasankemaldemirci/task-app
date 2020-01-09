@@ -256,7 +256,7 @@ describe('POST /tasks', () => {
 
       const tasks = await Task.find({})
 
-      expect(tasks.length).toEqual(1)
+      expect(tasks.length).toEqual(2)
   })
 
   test('Should NOT save task with empty description to database', async () => {
@@ -353,5 +353,15 @@ describe('GET /tasks', () => {
       const actual = Array.isArray(response.body)
 
       expect(actual).toBe(true)
+  })
+
+  test('Should return all tasks in database', async () => {
+    await request(app)
+      .get('/tasks')
+      .send()
+
+      const tasks = await Task.find({})
+
+      expect(tasks.length).toEqual(2)
   })
 })
