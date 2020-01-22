@@ -365,3 +365,50 @@ describe('GET /tasks', () => {
       expect(tasks.length).toEqual(2)
   })
 })
+
+describe('GET /task/:id', () => {
+  test('Should return 200 with valid object id that is in database', async () => {
+    await request(app)
+      .get(`/tasks/${taskOne._id}`)
+      .send()
+      .expect(200)
+  })
+
+  test('Should return 404 with valid object id that is not in database', async () => {
+    await request(app)
+      .get(`/tasks/${validObjectId}`)
+      .send()
+      .expect(404)
+  })
+
+  test('Should return 400 with invalid object id', async () => {
+    await request(app)
+      .get('/tasks/123456')
+      .send()
+      .expect(400)
+  })
+
+  test('Should return specific error message with invalid object id', async () => {
+    const response = await request(app)
+      .get('/tasks/123456')
+      .send()
+
+      const expected = 'Cast to ObjectId failed for value \"123456\" at path \"_id\" for model \"Task\"'
+
+      expect(response.body.message).toEqual(expected)
+  })
+
+  test('Should return correct task in response', async () => {
+    const response = await request(app)
+      .get(`/tasks/${taskOne._id}`)
+      .send()
+
+      const expected = {
+        _id: taskOne._id.toHexString(),
+        description: taskOne.description,
+        completed: taskOne.completed
+      }  
+
+      expect(response.body).toMatchObject(expected)
+  })
+})
