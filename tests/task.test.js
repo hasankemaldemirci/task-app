@@ -306,7 +306,7 @@ describe('DELETE /tasks/:id', () => {
       .expect(200)
   })
 
-  test('Should return 404 with valid object id that is not in database', async () => {
+  test('Should return 404 with valid ObjectId that is not in database', async () => {
     await request(app)
       .delete(`/tasks/${validObjectId}`)
       .send()
@@ -329,7 +329,7 @@ describe('DELETE /tasks/:id', () => {
       expect(response.body).toMatchObject(expectedResponse)
   })
 
-  test('Should return 500 with invalid object id', async () => {
+  test('Should return 500 with invalid ObjectId', async () => {
     await request(app)
       .delete('/tasks/123456')
       .send()
@@ -367,28 +367,28 @@ describe('GET /tasks', () => {
 })
 
 describe('GET /task/:id', () => {
-  test('Should return 200 with valid object id that is in database', async () => {
+  test('Should return 200 with valid ObjectId that is in database', async () => {
     await request(app)
       .get(`/tasks/${taskOne._id}`)
       .send()
       .expect(200)
   })
 
-  test('Should return 404 with valid object id that is not in database', async () => {
+  test('Should return 404 with valid ObjectId that is not in database', async () => {
     await request(app)
       .get(`/tasks/${validObjectId}`)
       .send()
       .expect(404)
   })
 
-  test('Should return 400 with invalid object id', async () => {
+  test('Should return 400 with invalid ObjectId', async () => {
     await request(app)
       .get('/tasks/123456')
       .send()
       .expect(400)
   })
 
-  test('Should return specific error message with invalid object id', async () => {
+  test('Should return specific error message with invalid ObjectId', async () => {
     const response = await request(app)
       .get('/tasks/123456')
       .send()
