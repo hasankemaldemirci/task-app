@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.get('/', async (req, res) => {
+router.get('/', async (_req, res) => {
   try {
     const tasks = await Task.find({})
     res.status(200).send(tasks)
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
 
     res.status(200).send(task)
   } catch (err) {
-    res.status(500).send()
+    res.status(400).send(err)
   }
 })
 
