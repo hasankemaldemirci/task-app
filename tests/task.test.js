@@ -412,3 +412,191 @@ describe('GET /task/:id', () => {
       expect(response.body).toMatchObject(expected)
   })
 })
+
+describe('PATCH /task/:id', () => {
+  test('Should return 200', async () => {
+    await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: 'Updated task',
+        completed: true
+      })
+      .expect(200)
+  })
+
+  test('Should return 404 with valid ObjectId that is not in database', async () => {
+    await request(app)
+      .patch(`/tasks/${validObjectId}`)
+      .send({
+        description: 'Updated task',
+        completed: true
+      })
+      .expect(404)
+  })
+
+  test('Should return correct object in response', async () => {
+    const response = await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: 'Updated task',
+        completed: true
+      })
+
+      const expected = {
+        description: 'Updated task',
+        completed: true
+      }
+
+      expect(response.body).toMatchObject(expected)
+  })
+
+  test('Should return specific error message with invalid ObjectId', async () => {
+    const response = await request(app)
+      .patch('/tasks/123456')
+      .send({
+        description: 'Updated task',
+        completed: true
+      })
+
+      const expected = 'Cast to ObjectId failed for value \"123456\" at path \"_id\" for model \"Task\"'
+
+      expect(response.body.message).toEqual(expected)
+  })
+
+  test('Should return 400 with invalid ObjectId', async () => {
+    await request(app)
+      .patch('/tasks/123456')
+      .send({
+        description: 'Updated task',
+        completed: true
+      })
+      .expect(400)
+  })
+
+  test('Should return 400 with empty request', async () => {
+    await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send()
+      .expect(400)
+  })
+
+  test('Should return specific error message with empty request', async () => {
+    const response = await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send()
+
+      const expected = 'Invalid updates!'
+
+      expect(response.body.error).toEqual(expected)
+  })
+
+  test('Should return 400 with empty array', async () => {
+    await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send([])
+      .expect(400)
+  })
+
+  test('Should return specific error message with empty array', async () => {
+    const response = await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send([])
+
+      const expected = 'Invalid updates!'
+
+      expect(response.body.error).toEqual(expected)
+  })
+
+  test('Should return 400 with empty object', async () => {
+    await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({})
+      .expect(400)
+  })
+
+  test('Should return specific error message with empty object', async () => {
+    const response = await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({})
+
+      const expected = 'Invalid updates!'
+
+      expect(response.body.error).toEqual(expected)
+  })
+
+  test('Should return 400 with empty description', async () => {
+    await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: ''
+      })
+      .expect(400)
+  })
+
+  test('Should return specific error message with empty description', async () => {
+    const response = await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: ''
+      })
+
+      const expected = 'Task validation failed: description: Path `description` is required.'
+
+      expect(response.body.message).toEqual(expected)
+  })
+
+  test('Should return updated task in response', async () => {
+    const response = await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: 'Updated task',
+        completed: true
+      })
+
+      const task = await Task.findById(taskOne._id)
+
+      const expectedResponse = {
+        _id: task._id.toHexString(),
+        description: task.description,
+        completed: task.completed
+      }
+      
+      expect(response.body).toMatchObject(expectedResponse)
+  })
+
+  test('Should NOT update task with invalid description property to database', async () => {
+    await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: ''
+      })
+
+      const task = await Task.findOne({ description: '' })
+
+      expect(task).toBeFalsy()
+  })
+
+  test('Should return specific error message if description is an object type', async () => {
+    const response = await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: {}
+      })
+
+      const expected = 'Task validation failed: description: Cast to String failed for value \"{}\" at path \"description\"'
+
+      expect(response.body.message).toEqual(expected)
+  })
+
+  test('Should return specific error message if description is an array type', async () => {
+    const response = await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: []
+      })
+
+      const expected = 'Task validation failed: description: Cast to String failed for value \"[]\" at path \"description\"'
+
+      expect(response.body.message).toEqual(expected)
+  })
+})
