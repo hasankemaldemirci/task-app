@@ -55,7 +55,9 @@ router.patch('/:id', async (req, res) => {
   try {
     const requestedUpdateKeys = Object.keys(req.body)
     const validUpdateKeys = ['description', 'completed']
-    const isValidUpdate = requestedUpdateKeys.every(key => validUpdateKeys.includes(key))
+    const isValidUpdate = 
+      requestedUpdateKeys.every(key => validUpdateKeys.includes(key)) &&
+      Object.entries(req.body).length
   
     if (!isValidUpdate) {
       return res.status(400).send({ error: 'Invalid updates!' })
