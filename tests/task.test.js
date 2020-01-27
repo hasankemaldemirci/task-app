@@ -4,7 +4,7 @@ const app = require('../src/app')
 
 const Task = require('../src/models/task')
 
-const { taskOne, validObjectId, setupDatabase } = require('./fixtures/db')
+const { taskOne, taskTwo, validObjectId, setupDatabase } = require('./fixtures/db')
 
 beforeEach(setupDatabase)
 
@@ -564,16 +564,16 @@ describe('PATCH /task/:id', () => {
       expect(response.body).toMatchObject(expectedResponse)
   })
 
-  test('Should NOT update task with invalid description property to database', async () => {
+  test('Should NOT update task if description is empty', async () => {
     await request(app)
       .patch(`/tasks/${taskOne._id}`)
       .send({
         description: ''
       })
 
-      const task = await Task.findOne({ description: '' })
+      const task = await Task.findById(taskOne._id)
 
-      expect(task).toBeFalsy()
+      expect(task.description).not.toEqual('')
   })
 
   test('Should return specific error message if description is an object type', async () => {
@@ -598,5 +598,58 @@ describe('PATCH /task/:id', () => {
       const expected = 'Task validation failed: description: Cast to String failed for value \"[]\" at path \"description\"'
 
       expect(response.body.message).toEqual(expected)
+  })
+
+  test('Should NOT update completed property if not sent in request', async () => {
+    await request(app)
+      .patch(`/tasks/${taskTwo._id}`)
+      .send({
+        description: 'Updated task'
+      })
+
+      const task = await Task.findById(taskTwo._id)
+      expect(task.completed).toEqual(true)
+  })
+
+  test('Should trim description before saving', async () => {
+    await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: '    Updated task   '
+      })
+
+      const task = await Task.findById(taskOne._id)
+      expect(task.description).toEqual('Updated task')
+  })
+
+  test('Should NOT update task if invalid fields sent in request', async () => {
+    await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: 'Updated task',
+        invalidField: 'invalid'
+      })
+
+      const task = await Task.findById(taskOne._id)
+      expect(task.description).not.toEqual('Updated task')
+  })
+
+  test('Should update task in database', async () => {
+    await request(app)
+      .patch(`/tasks/${taskOne._id}`)
+      .send({
+        description: 'Updated task',
+        completed: true
+      })
+
+      const expectedTask = {
+        _id: taskOne._id,
+        description: 'Updated task',
+        completed: true
+      }
+
+      const task = await Task.findById(taskOne._id)
+
+      expect(task).toMatchObject(expectedTask)
   })
 })
