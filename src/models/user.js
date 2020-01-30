@@ -22,11 +22,10 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       trim: true,
       minlength: 7,
       validate(value) {
-        if (value.includes('password')) {
+        if (value.toLowerCase().includes('password')) {
           throw new Error('Password value can not contain the word "password"')
         }
       }
