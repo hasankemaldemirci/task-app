@@ -22,6 +22,33 @@ describe('POST /users', () => {
 
     const user = await User.findOne({ email: 'test@test.com' })
 
-    expect(user).toMatchObject(validUser)
+    expect(user).toBeTruthy()
+  })
+
+  test('Should return correct user data in response', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    const response = await request(app)
+      .post('/users')
+      .send(validUser)
+
+    expect(response.body).toMatchObject(validUser)
+  })
+
+  test('Should return 201 with valid user data', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+      .expect(201)
   })
 })

@@ -7,7 +7,7 @@ const User = require('../models/user')
 router.post('/', async (req, res) => {
   const user = new User(req.body)
   await user.save()
-  res.send(user)
+  res.status(201).send(user)
 })
 
 module.exports = router
