@@ -157,4 +157,20 @@ describe('POST /users', () => {
 
     expect(user.email).toEqual('test@test.com')
   })
+
+  test('Should return validation error message if email is invalid', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test',
+      password: '1234567'
+    }
+
+    const response = await request(app)
+      .post('/users')
+      .send(invalidUser)
+
+    const expectedErrorMessage = 'User validation failed: email: Email is invalid!'
+
+    expect(response.body.message).toEqual(expectedErrorMessage)
+  })
 })
