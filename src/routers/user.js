@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
     await user.save()
     res.status(201).send(user)
   } catch(err) {
-    res.send(err)
+    res.status(400).send(err)
   }
 })
 

@@ -83,4 +83,17 @@ describe('POST /users', () => {
 
     expect(user.name).toEqual('Hasan')
   })
+
+  test('Should return 400 if name field is empty', async () => {
+    const invalidUser = {
+      name: '',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(invalidUser)
+      .expect(400)
+  })
 })
