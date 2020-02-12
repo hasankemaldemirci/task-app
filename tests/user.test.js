@@ -51,4 +51,20 @@ describe('POST /users', () => {
 
     expect(user).toBeTruthy()
   })
+  
+  test('Should return validation error message if name field is empty', async () => {
+    const invalidUser = {
+      name: '',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    const response = await request(app)
+      .post('/users')
+      .send(invalidUser)
+
+    const expectedErrorMessage = 'User validation failed: name: Path `name` is required.'
+
+    expect(response.body.message).toEqual(expectedErrorMessage)
+  })
 })
