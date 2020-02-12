@@ -109,4 +109,20 @@ describe('POST /users', () => {
       .send(invalidUser)
       .expect(400)
   })
+
+  test('Should NOT save user if email field is empty', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: '',
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(invalidUser)
+
+    const user = await User.findOne({ email: invalidUser.email })
+
+    expect(user).toBeFalsy()
+  })
 })
