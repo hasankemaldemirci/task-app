@@ -47,7 +47,7 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
 
-    const user = User.findOne(validUser.email)
+    const user = User.findOne({ email: validUser.email })
 
     expect(user).toBeTruthy()
   })
