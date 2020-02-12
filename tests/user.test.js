@@ -67,4 +67,20 @@ describe('POST /users', () => {
 
     expect(response.body.message).toEqual(expectedErrorMessage)
   })
+
+  test('Should trim user name before saving', async () => {
+    const validUser = {
+      name: '   Hasan   ',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+
+    const user = await User.findOne({ email: validUser.email })
+
+    expect(user.name).toEqual('Hasan')
+  })
 })
