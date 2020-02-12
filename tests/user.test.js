@@ -19,4 +19,18 @@ describe('POST /users', () => {
       .send(validUser)
       .expect(201)
   })
+
+  test('Should return correct response with valid user', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    const response = await request(app)
+      .post('/users')
+      .send(validUser)
+
+    expect(response.body).toMatchObject(validUser)
+  })
 })
