@@ -173,4 +173,20 @@ describe('POST /users', () => {
 
     expect(response.body.message).toEqual(expectedErrorMessage)
   })
+
+  test('Should convert email to lowercase', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'VALIDUSER@TEST.COM',
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+
+    const user = await User.findOne({ email: validUser.email })
+
+    expect(user.email).toEqual('validuser@test.com')
+  })
 })
