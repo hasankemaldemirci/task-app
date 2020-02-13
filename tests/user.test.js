@@ -266,4 +266,20 @@ describe('POST /users', () => {
 
     expect(user.password).toEqual('1234567')
   })
+
+  test('Should NOT save user if password value contain the word "password"', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: 'password1'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(invalidUser)
+
+    const user = await User.findOne({ password: invalidUser.password })
+
+    expect(user).toBeFalsy()
+  })
 })
