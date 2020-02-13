@@ -361,4 +361,18 @@ describe('POST /users', () => {
 
     expect(user.age).toEqual(0)
   })
+
+  test('Should return 400 if user age is less than zero', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567',
+      age: -1
+    }
+
+    await request(app)
+      .post('/users')
+      .send(invalidUser)
+      .expect(400)
+  })
 })
