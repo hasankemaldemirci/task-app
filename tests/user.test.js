@@ -298,4 +298,18 @@ describe('POST /users', () => {
 
     expect(response.body.message).toEqual(expectedErrorMessage)
   })
+
+  test('Should return 400 if age is string', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567',
+      age: 'yas'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(invalidUser)
+      .expect(400)
+  })
 })
