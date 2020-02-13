@@ -392,4 +392,21 @@ describe('POST /users', () => {
 
     expect(response.body.message).toBe(expectedErrorMessage)
   })
+
+  test('Should NOT save user if age is less than zero', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567',
+      age: -1
+    }
+
+    await request(app)
+      .post('/users')
+      .send(invalidUser)
+
+    const user = await User.findOne({ age: invalidUser.age })
+
+    expect(user).toBeFalsy()
+  })
 })
