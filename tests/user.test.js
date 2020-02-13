@@ -193,7 +193,7 @@ describe('POST /users', () => {
   test('Should return 400 if password is invalid', async () => {
     const invalidUser = {
       name: 'Hasan',
-      email: 'test',
+      email: 'test@test.com',
       password: '123456'
     }
 
@@ -201,5 +201,21 @@ describe('POST /users', () => {
       .post('/users')
       .send(invalidUser)
       .expect(400)
+  })
+
+  test('Should NOT save if password is shorter than the minimum allowed length', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '123456'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(invalidUser)
+
+    const user = await User.findOne({ password: invalidUser.password })
+
+    expect(user).toBeFalsy()
   })
 })
