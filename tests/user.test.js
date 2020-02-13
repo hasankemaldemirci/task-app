@@ -234,4 +234,20 @@ describe('POST /users', () => {
 
     expect(user).toBeTruthy()
   })
+
+  test('Should return validation error message if password is shorter than the minimum allowed length', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '123456'
+    }
+
+    const response = await request(app)
+      .post('/users')
+      .send(invalidUser)
+
+    const expectedErrorMessage = 'User validation failed: password: Path `password` (`123456`) is shorter than the minimum allowed length (7).'
+
+    expect(response.body.message).toEqual(expectedErrorMessage)
+  })
 })
