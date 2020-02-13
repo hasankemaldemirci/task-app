@@ -312,4 +312,20 @@ describe('POST /users', () => {
       .send(invalidUser)
       .expect(400)
   })
+
+  test('Should save user if age property not sent in request', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+
+    const users = await User.find({})
+
+    expect(users.length).toEqual(1)
+  })
 })
