@@ -282,4 +282,20 @@ describe('POST /users', () => {
 
     expect(user).toBeFalsy()
   })
+
+  test('Should return validation error message if user password value contain the word "password"', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: 'password1'
+    }
+
+    const response = await request(app)
+      .post('/users')
+      .send(invalidUser)
+
+    const expectedErrorMessage = 'User validation failed: password: Password value can not contain the word \"password\"'
+
+    expect(response.body.message).toEqual(expectedErrorMessage)
+  })
 })
