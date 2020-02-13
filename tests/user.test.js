@@ -218,4 +218,20 @@ describe('POST /users', () => {
 
     expect(user).toBeFalsy()
   })
+
+  test('Should save user if password is greater than or equal to the minimum allowed length', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+
+    const user = await User.findOne({ password: validUser.password })
+
+    expect(user).toBeTruthy()
+  })
 })
