@@ -375,4 +375,21 @@ describe('POST /users', () => {
       .send(invalidUser)
       .expect(400)
   })
+
+  test('Should return validation error message if user age is less than zero', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567',
+      age: -1
+    }
+
+    const response = await request(app)
+      .post('/users')
+      .send(invalidUser)
+
+    const expectedErrorMessage = 'User validation failed: age: Age must be greater than or equal to 0'
+
+    expect(response.body.message).toBe(expectedErrorMessage)
+  })
 })
