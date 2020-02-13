@@ -409,4 +409,18 @@ describe('POST /users', () => {
 
     expect(user).toBeFalsy()
   })
+
+  test('Should return 201 if user age is equal to zero', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567',
+      age: 0
+    }
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+      .expect(201)
+  })
 })
