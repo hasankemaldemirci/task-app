@@ -189,4 +189,17 @@ describe('POST /users', () => {
 
     expect(user.email).toEqual('validuser@test.com')
   })
+
+  test('Should return 400 if password is invalid', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test',
+      password: '123456'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(invalidUser)
+      .expect(400)
+  })
 })
