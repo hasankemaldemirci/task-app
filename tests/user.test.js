@@ -328,4 +328,21 @@ describe('POST /users', () => {
 
     expect(users.length).toEqual(1)
   })
+
+  test('Should return validation error message if user age is string', async () => {
+    const invalidUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567',
+      age: 'yas'
+    }
+
+    const response = await request(app)
+      .post('/users')
+      .send(invalidUser)
+
+    const expectedErrorMessage = 'User validation failed: age: Cast to Number failed for value \"yas\" at path \"age\"'
+
+    expect(response.body.message).toEqual(expectedErrorMessage)
+  })
 })
