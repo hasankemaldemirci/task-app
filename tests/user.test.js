@@ -68,7 +68,7 @@ describe('POST /users', () => {
     expect(response.body.message).toEqual(expectedErrorMessage)
   })
 
-  test('Should trim user name before saving', async () => {
+  test('Should save trimmed user name to database', async () => {
     const validUser = {
       name: '   Hasan   ',
       email: 'test@test.com',
@@ -110,7 +110,7 @@ describe('POST /users', () => {
       .expect(400)
   })
 
-  test('Should NOT save user if email field is empty', async () => {
+  test('Should NOT save user to database if email field is empty', async () => {
     const invalidUser = {
       name: 'Hasan',
       email: '',
@@ -142,7 +142,7 @@ describe('POST /users', () => {
     expect(response.body.message).toEqual(expectedErrorMessage)
   })
 
-  test('Should trim email before saving', async () => {
+  test('Should save trimmed email to database', async () => {
     const validUser = {
       name: 'Hasan',
       email: '   test@test.com      ',
@@ -153,7 +153,7 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
 
-    const user = await User.findOne({ email: validUser.email })
+    const user = await User.findOne({ email: 'test@test.com' })
 
     expect(user.email).toEqual('test@test.com')
   })
@@ -185,12 +185,12 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
 
-    const user = await User.findOne({ email: validUser.email })
+    const user = await User.findOne({ email: 'validuser@test.com' })
 
     expect(user.email).toEqual('validuser@test.com')
   })
 
-  test('Should return 400 if password is invalid', async () => {
+  test('Should return 400 if password length is less than 7', async () => {
     const invalidUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -203,7 +203,7 @@ describe('POST /users', () => {
       .expect(400)
   })
 
-  test('Should NOT save if password is shorter than the minimum allowed length', async () => {
+  test('Should NOT save user to database if password length is less than 7', async () => {
     const invalidUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -219,7 +219,7 @@ describe('POST /users', () => {
     expect(user).toBeFalsy()
   })
 
-  test('Should save user if password is greater than or equal to the minimum allowed length', async () => {
+  test('Should save user to database if password length is greater than or equal to 7', async () => {
     const validUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -235,7 +235,7 @@ describe('POST /users', () => {
     expect(user).toBeTruthy()
   })
 
-  test('Should return validation error message if password is shorter than the minimum allowed length', async () => {
+  test('Should return validation error message if password length is less than 7', async () => {
     const invalidUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -251,7 +251,7 @@ describe('POST /users', () => {
     expect(response.body.message).toEqual(expectedErrorMessage)
   })
 
-  test('Should trim password before saving', async () => {
+  test('Should save trimmed password to database', async () => {
     const validUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -262,12 +262,12 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
 
-    const user = await User.findOne({ password: validUser.password })
+    const user = await User.findOne({ password: '1234567' })
 
     expect(user.password).toEqual('1234567')
   })
 
-  test('Should NOT save user if password value contain the word "password"', async () => {
+  test('Should NOT save user to database if password value contains the word "password"', async () => {
     const invalidUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -283,7 +283,7 @@ describe('POST /users', () => {
     expect(user).toBeFalsy()
   })
 
-  test('Should return validation error message if user password value contain the word "password"', async () => {
+  test('Should return validation error message if user password value contains the word "password"', async () => {
     const invalidUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -313,7 +313,7 @@ describe('POST /users', () => {
       .expect(400)
   })
 
-  test('Should save user if age property not sent in request', async () => {
+  test('Should save user to database if age not sent', async () => {
     const validUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -324,9 +324,9 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
 
-    const users = await User.find({})
+    const user = await User.findOne({ email: 'test@test.com' })
 
-    expect(users.length).toEqual(1)
+    expect(user).toBeTruthy()
   })
 
   test('Should return validation error message if user age is string', async () => {
@@ -346,7 +346,7 @@ describe('POST /users', () => {
     expect(response.body.message).toEqual(expectedErrorMessage)
   })
 
-  test('Should user age is zero if age property not sent in request', async () => {
+  test('Should save age as 0 to database if not sent', async () => {
     const validUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -362,7 +362,7 @@ describe('POST /users', () => {
     expect(user.age).toEqual(0)
   })
 
-  test('Should return 400 if user age is less than zero', async () => {
+  test('Should return 400 if user age is less than 0', async () => {
     const invalidUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -376,7 +376,7 @@ describe('POST /users', () => {
       .expect(400)
   })
 
-  test('Should return validation error message if user age is less than zero', async () => {
+  test('Should return validation error message if user age is less than 0', async () => {
     const invalidUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -390,10 +390,10 @@ describe('POST /users', () => {
 
     const expectedErrorMessage = 'User validation failed: age: Age must be greater than or equal to 0'
 
-    expect(response.body.message).toBe(expectedErrorMessage)
+    expect(response.body.message).toEqual(expectedErrorMessage)
   })
 
-  test('Should NOT save user if age is less than zero', async () => {
+  test('Should NOT save user to database if age is less than 0', async () => {
     const invalidUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -405,12 +405,12 @@ describe('POST /users', () => {
       .post('/users')
       .send(invalidUser)
 
-    const user = await User.findOne({ age: invalidUser.age })
+    const user = await User.findOne({ email: 'test@test.com' })
 
     expect(user).toBeFalsy()
   })
 
-  test('Should return 201 if user age is equal to zero', async () => {
+  test('Should return 201 if user age is equal to 0', async () => {
     const validUser = {
       name: 'Hasan',
       email: 'test@test.com',
@@ -424,7 +424,7 @@ describe('POST /users', () => {
       .expect(201)
   })
 
-  test('Should return 201 if user age is greater than zero', async () => {
+  test('Should return 201 if user age is greater than 0', async () => {
     const validUser = {
       name: 'Hasan',
       email: 'test@test.com',
