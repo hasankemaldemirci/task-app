@@ -426,4 +426,21 @@ describe('POST /users', () => {
       .send(validUser)
       .expect(201)
   })
+  
+  test('Should save age as null to database with empty string', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567',
+      age: ''
+    }
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+
+    const user = await User.findOne({ email: validUser.email })
+    
+    expect(user.age).toBeNull()
+  })
 })
