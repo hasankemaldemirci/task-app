@@ -1,4 +1,5 @@
 const request = require('supertest')
+const bcrypt = require('bcryptjs')
 
 const app = require('../src/app')
 
@@ -219,7 +220,7 @@ describe('POST /users', () => {
       .post('/users')
       .send(invalidUser)
 
-    const user = await User.findOne({ password: invalidUser.password })
+    const user = await User.findOne({ email: invalidUser.email })
 
     expect(user).toBeFalsy()
   })
@@ -267,7 +268,7 @@ describe('POST /users', () => {
       .post('/users')
       .send(invalidUser)
 
-    const user = await User.findOne({ password: invalidUser.password })
+    const user = await User.findOne({ email: invalidUser.email })
 
     expect(user).toBeFalsy()
   })
@@ -286,6 +287,24 @@ describe('POST /users', () => {
     const expectedErrorMessage = 'User validation failed: password: Password value can not contain the word \"password\"'
 
     expect(response.body.message).toEqual(expectedErrorMessage)
+  })
+
+  test('Should save user to database with encrypted password', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+
+    const user = await User.findOne({ email: validUser.email })
+
+    isPasswordEncrypted = await bcrypt.compare(validUser.password, user.password)
+
+    expect(isPasswordEncrypted).toEqual(true)
   })
 
   test('Should return 400 if age is string', async () => {
