@@ -302,9 +302,9 @@ describe('POST /users', () => {
 
     const user = await User.findOne({ email: validUser.email })
 
-    isPasswordEncrypted = await bcrypt.compare(validUser.password, user.password)
+    const isMatch = await bcrypt.compare(validUser.password, user.password)
 
-    expect(isPasswordEncrypted).toEqual(true)
+    expect(isMatch).toEqual(true)
   })
 
   test('Should return 400 if age is string', async () => {
