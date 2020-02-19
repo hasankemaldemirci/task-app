@@ -33,7 +33,12 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
 
-    expect(response.body).toMatchObject(validUser)
+    const expectedUser = {
+      name: 'Hasan',
+      email: 'test@test.com'
+    }
+
+    expect(response.body).toMatchObject(expectedUser)
   })
 
   test('Should save valid user to database', async () => {
@@ -230,7 +235,7 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
 
-    const user = await User.findOne({ password: validUser.password })
+    const user = await User.findOne({ email: validUser.email })
 
     expect(user).toBeTruthy()
   })
@@ -249,22 +254,6 @@ describe('POST /users', () => {
     const expectedErrorMessage = 'User validation failed: password: Path `password` (`123456`) is shorter than the minimum allowed length (7).'
 
     expect(response.body.message).toEqual(expectedErrorMessage)
-  })
-
-  test('Should save trimmed password to database', async () => {
-    const validUser = {
-      name: 'Hasan',
-      email: 'test@test.com',
-      password: '     1234567      '
-    }
-
-    await request(app)
-      .post('/users')
-      .send(validUser)
-
-    const user = await User.findOne({ password: '1234567' })
-
-    expect(user.password).toEqual('1234567')
   })
 
   test('Should NOT save user to database if password value contains the word "password"', async () => {
