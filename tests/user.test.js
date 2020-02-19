@@ -1,4 +1,5 @@
 const request = require('supertest')
+const bcrypt = require('bcryptjs')
 
 const app = require('../src/app')
 
@@ -33,7 +34,12 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
 
-    expect(response.body).toMatchObject(validUser)
+    const expectedUser = {
+      name: 'Hasan',
+      email: 'test@test.com'
+    }
+
+    expect(response.body).toMatchObject(expectedUser)
   })
 
   test('Should save valid user to database', async () => {
@@ -214,7 +220,7 @@ describe('POST /users', () => {
       .post('/users')
       .send(invalidUser)
 
-    const user = await User.findOne({ password: invalidUser.password })
+    const user = await User.findOne({ email: invalidUser.email })
 
     expect(user).toBeFalsy()
   })
@@ -230,7 +236,7 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
 
-    const user = await User.findOne({ password: validUser.password })
+    const user = await User.findOne({ email: validUser.email })
 
     expect(user).toBeTruthy()
   })
@@ -251,22 +257,6 @@ describe('POST /users', () => {
     expect(response.body.message).toEqual(expectedErrorMessage)
   })
 
-  test('Should save trimmed password to database', async () => {
-    const validUser = {
-      name: 'Hasan',
-      email: 'test@test.com',
-      password: '     1234567      '
-    }
-
-    await request(app)
-      .post('/users')
-      .send(validUser)
-
-    const user = await User.findOne({ password: '1234567' })
-
-    expect(user.password).toEqual('1234567')
-  })
-
   test('Should NOT save user to database if password value contains the word "password"', async () => {
     const invalidUser = {
       name: 'Hasan',
@@ -278,7 +268,7 @@ describe('POST /users', () => {
       .post('/users')
       .send(invalidUser)
 
-    const user = await User.findOne({ password: invalidUser.password })
+    const user = await User.findOne({ email: invalidUser.email })
 
     expect(user).toBeFalsy()
   })
@@ -297,6 +287,24 @@ describe('POST /users', () => {
     const expectedErrorMessage = 'User validation failed: password: Password value can not contain the word \"password\"'
 
     expect(response.body.message).toEqual(expectedErrorMessage)
+  })
+
+  test('Should save user to database with encrypted password', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+
+    const user = await User.findOne({ email: validUser.email })
+
+    const isMatch = await bcrypt.compare(validUser.password, user.password)
+
+    expect(isMatch).toEqual(true)
   })
 
   test('Should return 400 if age is string', async () => {
@@ -436,5 +444,22 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
       .expect(201)
+  })
+  
+  test('Should save age as null to database with empty string', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567',
+      age: ''
+    }
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+
+    const user = await User.findOne({ email: validUser.email })
+    
+    expect(user.age).toBeNull()
   })
 })
