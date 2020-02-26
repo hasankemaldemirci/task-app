@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
     const task = await Task.findById(req.params.id)
 
     if (!task) {
-      return res.status(404).send()
+      return res.status(204).send()
     }
 
     res.status(200).send(task)
@@ -42,7 +42,7 @@ router.delete('/:id', async (req, res) => {
     const task = await Task.findByIdAndDelete(req.params.id)
 
     if (!task) {
-      return res.status(404).send()
+      return res.status(204).send()
     }
 
     res.send(task)
@@ -66,7 +66,7 @@ router.patch('/:id', async (req, res) => {
     const task = await Task.findById(req.params.id)
   
     if (!task) {
-      return res.status(404).send()
+      return res.status(204).send()
     }
   
     requestedUpdateKeys.forEach(key => task[key] = req.body[key])

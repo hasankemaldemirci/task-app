@@ -306,11 +306,11 @@ describe('DELETE /tasks/:id', () => {
       .expect(200)
   })
 
-  test('Should return 404 with valid ObjectId that is not in database', async () => {
+  test('Should return 204 with valid ObjectId that is not in database', async () => {
     await request(app)
       .delete(`/tasks/${validObjectId}`)
       .send()
-      .expect(404)
+      .expect(204)
   })
 
   test('Should return deleted task in response', async () => {
@@ -374,11 +374,11 @@ describe('GET /task/:id', () => {
       .expect(200)
   })
 
-  test('Should return 404 with valid ObjectId that is not in database', async () => {
+  test('Should return 204 with valid ObjectId that is not in database', async () => {
     await request(app)
       .get(`/tasks/${validObjectId}`)
       .send()
-      .expect(404)
+      .expect(204)
   })
 
   test('Should return 400 with invalid ObjectId', async () => {
@@ -424,14 +424,14 @@ describe('PATCH /task/:id', () => {
       .expect(200)
   })
 
-  test('Should return 404 with valid ObjectId that is not in database', async () => {
+  test('Should return 204 with valid ObjectId that is not in database', async () => {
     await request(app)
       .patch(`/tasks/${validObjectId}`)
       .send({
         description: 'Updated task',
         completed: true
       })
-      .expect(404)
+      .expect(204)
   })
 
   test('Should return correct object in response', async () => {
