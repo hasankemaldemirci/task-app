@@ -5,9 +5,10 @@ const app = require('../src/app')
 
 const User = require('../src/models/user')
 
-const { setupDatabase } = require('./fixtures/db')
+const { setupDatabase, disconnectFromDatabase } = require('./fixtures/db')
 
 beforeEach(setupDatabase)
+afterAll(disconnectFromDatabase)
 
 describe('POST /users', () => {
   test('Should return 201 with valid user', async () => {

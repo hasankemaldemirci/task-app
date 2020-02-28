@@ -25,9 +25,14 @@ const setupDatabase = async () => {
   await new Task(taskTwo).save()
 }
 
+const disconnectFromDatabase = async () => {
+  await mongoose.disconnect()
+}
+
 module.exports = {
   taskOne,
   taskTwo,
   validObjectId,
-  setupDatabase
+  setupDatabase,
+  disconnectFromDatabase
 }
