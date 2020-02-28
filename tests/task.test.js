@@ -4,9 +4,10 @@ const app = require('../src/app')
 
 const Task = require('../src/models/task')
 
-const { taskOne, taskTwo, validObjectId, setupDatabase } = require('./fixtures/db')
+const { taskOne, taskTwo, validObjectId, setupDatabase, disconnectFromDatabase } = require('./fixtures/db')
 
 beforeEach(setupDatabase)
+afterAll(disconnectFromDatabase)
 
 describe('POST /tasks', () => {
   test('Should return 201 with valid request', async () => {
