@@ -25,8 +25,7 @@ jobs: # a collection of steps
           command: npm run coverage
       - store_artifacts: # special step to save test results as as artifact
           # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-          path: test-results
-          prefix: tests
+          path: ~/test-results
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: test-results
+          path: ~/test-results
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
