@@ -32,7 +32,7 @@
     "validator": "^12.2.0"
   },
   "devDependencies": {
-    "env-cmd": "^10.0.1",
+    "env-cmd": "^10.1.0",
     "jest": "^24.9.0",
     "nodemon": "^2.0.1",
     "supertest": "^4.0.2"
