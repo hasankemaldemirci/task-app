@@ -28,7 +28,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
-    "mongoose": "^5.7.10",
+    "mongoose": "^5.9.7",
     "validator": "^12.2.0"
   },
   "devDependencies": {
