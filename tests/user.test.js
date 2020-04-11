@@ -308,6 +308,20 @@ describe('POST /users', () => {
     expect(isMatch).toEqual(true)
   })
 
+  test('Should NOT return password in response', async () => {
+    const validUser = {
+      name: 'Hasan',
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    const response = await request(app)
+      .post('/users')
+      .send(validUser)
+
+    expect(response.body.password).toBeFalsy()
+  })
+
   test('Should return 400 if age is string', async () => {
     const invalidUser = {
       name: 'Hasan',
