@@ -39,23 +39,19 @@ const userSchema = new mongoose.Schema(
           throw new Error('Age must be greater than or equal to 0')
         }
       }
-    }
+    },
+    tokens: [{
+      token: {
+        type: String,
+        require: true
+      }
+    }]
   },
   {
     timestamps: true,
     versionKey: false
   }
 )
-
-userSchema.pre('save', async function (next) {
-  const user = this
-  
-  if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 8)
-  }
-
-  next()
-})
 
 userSchema.methods.toJSON = function () {
   const user = this
@@ -67,6 +63,16 @@ userSchema.methods.toJSON = function () {
 
   return userObject
 }
+
+userSchema.pre('save', async function (next) {
+  const user = this
+  
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8)
+  }
+
+  next()
+})
 
 const User = mongoose.model('User', userSchema)
 
