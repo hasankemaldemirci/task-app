@@ -9,7 +9,7 @@ const userOne = {
   _id: userOneId,
   age: 0,
   name: 'User one',
-  email: 'userone@gmail.com',
+  email: 'userone@example.com',
   password: 'userone123456',
   tokens: [{
     token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET)

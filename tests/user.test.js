@@ -38,7 +38,7 @@ describe('POST /users', () => {
     const expectedResponse = {
       user: {
         _id: expect.any(String),
-        age: expect.any(Number),
+        age: 0,
         name: 'Hasan',
         email: 'test@test.com'
       },
@@ -542,27 +542,27 @@ describe('POST /users/login', () => {
     expect(response.body.token).toEqual(expectedToken)
   })
 
-  test('Should return 400 with not exist user', async () => {
-    const nonExistUser = {
+  test('Should return 400 with non existent user', async () => {
+    const nonExistentUser = {
       email: 'test@test.com',
       password: '1234567'
     }
 
     await request(app)
       .post('/users/login')
-      .send(nonExistUser)
+      .send(nonExistentUser)
       .expect(400)
   })
 
-  test('Should return specific error message with not exist user', async () => {
-    const nonExistUser = {
+  test('Should return specific error message with non existent user', async () => {
+    const nonExistentUser = {
       email: 'test@test.com',
       password: '1234567'
     }
 
     const response = await request(app)
       .post('/users/login')
-      .send(nonExistUser)
+      .send(nonExistentUser)
 
     const expectedErrorMessage = 'Unable to login!'
 
@@ -570,26 +570,26 @@ describe('POST /users/login', () => {
   })
 
   test('Should return 400 with invalid credentials', async () => {
-    const invalidCredentials = {
-      email: 'asdada',
-      password: '123'
+    const invalidUser = {
+      email: 'invalid@mail.com',
+      password: '1234567'
     }
 
     await request(app)
       .post('/users/login')
-      .send(invalidCredentials)
+      .send(invalidUser)
       .expect(400)
   })
 
   test('Should return specific error message with invalid credentials', async () => {
-    const invalidCredentials = {
-      email: 'asdada',
-      password: '123'
+    const invalidUser = {
+      email: 'invalid@mail.com',
+      password: '1234567'
     }
 
     const response = await request(app)
       .post('/users/login')
-      .send(invalidCredentials)
+      .send(invalidUser)
 
     const expectedErrorMessage = 'Unable to login!'
 
@@ -597,14 +597,14 @@ describe('POST /users/login', () => {
   })
 
   test('Should return 400 if password does not match', async () => {
-    const nonExistUser = {
+    const nonExistentUser = {
       email: userOne.email,
       password: '1234567'
     }
 
     await request(app)
       .post('/users/login')
-      .send(nonExistUser)
+      .send(nonExistentUser)
       .expect(400)
   })
 })
