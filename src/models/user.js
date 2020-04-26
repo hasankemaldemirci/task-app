@@ -60,8 +60,27 @@ userSchema.methods.toJSON = function () {
   delete userObject.createdAt
   delete userObject.updatedAt
   delete userObject.password
+  delete userObject.tokens
 
   return userObject
+}
+
+userSchema.statics.findByCredentials = async (email, password) => {
+  const user = await User.findOne({ email })
+
+  if (!user) {
+    throw new Error('Unable to login!')
+  }
+
+  console.log(password, user.password)
+
+  const isMatch = await bcrypt.compare(password, user.password)
+
+  if (!isMatch) {
+    throw new Error('Unable to login!')
+  }
+
+  return user
 }
 
 userSchema.pre('save', async function (next) {
