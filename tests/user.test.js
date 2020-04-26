@@ -5,7 +5,7 @@ const app = require('../src/app')
 
 const User = require('../src/models/user')
 
-const { setupDatabase, disconnectFromDatabase } = require('./fixtures/db')
+const { setupDatabase, disconnectFromDatabase, userOneId, userOne } = require('./fixtures/db')
 
 beforeEach(setupDatabase)
 afterAll(disconnectFromDatabase)
@@ -35,12 +35,17 @@ describe('POST /users', () => {
       .post('/users')
       .send(validUser)
 
-    const expectedUser = {
-      name: 'Hasan',
-      email: 'test@test.com'
+    const expectedResponse = {
+      user: {
+        _id: expect.any(String),
+        age: expect.any(Number),
+        name: 'Hasan',
+        email: 'test@test.com'
+      },
+      token: expect.any(String)
     }
 
-    expect(response.body).toMatchObject(expectedUser)
+    expect(response.body).toEqual(expectedResponse)
   })
 
   test('Should save valid user to database', async () => {
@@ -504,5 +509,102 @@ test('Shound NOT return updatedAt in response', async () => {
     const user = await User.findOne({ email: validUser.email })
     
     expect(user.age).toBeNull()
+  })
+})
+
+describe('POST /users/login', () => {
+  test('Should return 200 with existing user', async () => {
+    const existingUser = {
+      email: userOne.email,
+      password: userOne.password
+    }
+
+    await request(app)
+      .post('/users/login')
+      .send(existingUser)
+      .expect(200)
+  })
+
+  test('Should generate and save a new authentication token for user', async () => {
+    const existingUser = {
+      email: userOne.email,
+      password: userOne.password
+    }
+
+    const response = await request(app)
+      .post('/users/login')
+      .send(existingUser)
+
+    const user = await User.findById(userOneId)
+
+    const expectedToken = user.tokens[1].token
+
+    expect(response.body.token).toEqual(expectedToken)
+  })
+
+  test('Should return 400 with not exist user', async () => {
+    const nonExistUser = {
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users/login')
+      .send(nonExistUser)
+      .expect(400)
+  })
+
+  test('Should return specific error message with not exist user', async () => {
+    const nonExistUser = {
+      email: 'test@test.com',
+      password: '1234567'
+    }
+
+    const response = await request(app)
+      .post('/users/login')
+      .send(nonExistUser)
+
+    const expectedErrorMessage = 'Unable to login!'
+
+    expect(response.body.error).toEqual(expectedErrorMessage)
+  })
+
+  test('Should return 400 with invalid credentials', async () => {
+    const invalidCredentials = {
+      email: 'asdada',
+      password: '123'
+    }
+
+    await request(app)
+      .post('/users/login')
+      .send(invalidCredentials)
+      .expect(400)
+  })
+
+  test('Should return specific error message with invalid credentials', async () => {
+    const invalidCredentials = {
+      email: 'asdada',
+      password: '123'
+    }
+
+    const response = await request(app)
+      .post('/users/login')
+      .send(invalidCredentials)
+
+    const expectedErrorMessage = 'Unable to login!'
+
+    expect(response.body.error).toEqual(expectedErrorMessage)
+  })
+
+  test('Should return 400 if password does not match', async () => {
+    const nonExistUser = {
+      email: userOne.email,
+      password: '1234567'
+    }
+
+    await request(app)
+      .post('/users/login')
+      .send(nonExistUser)
+      .expect(400)
   })
 })
