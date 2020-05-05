@@ -187,7 +187,7 @@ describe('POST /tasks', () => {
         description: ['string', 'string']
       })
 
-      const expected = `Task validation failed: description: Cast to String failed for value \"[ 'string', 'string' ]\" at path \"description\"`
+      const expected = `Task validation failed: description: Cast to string failed for value \"[ 'string', 'string' ]\" at path \"description\"`
 
       expect(response.body.message).toEqual(expected)
   })
@@ -199,7 +199,7 @@ describe('POST /tasks', () => {
         description: {key: 'value'}
       })
 
-      const expected = `Task validation failed: description: Cast to String failed for value \"{ key: 'value' }\" at path \"description\"`
+      const expected = `Task validation failed: description: Cast to string failed for value \"{ key: 'value' }\" at path \"description\"`
 
       expect(response.body.message).toEqual(expected)
   })
@@ -584,7 +584,7 @@ describe('PATCH /task/:id', () => {
         description: {}
       })
 
-      const expected = 'Task validation failed: description: Cast to String failed for value \"{}\" at path \"description\"'
+      const expected = 'Task validation failed: description: Cast to string failed for value \"{}\" at path \"description\"'
 
       expect(response.body.message).toEqual(expected)
   })
@@ -596,7 +596,7 @@ describe('PATCH /task/:id', () => {
         description: []
       })
 
-      const expected = 'Task validation failed: description: Cast to String failed for value \"[]\" at path \"description\"'
+      const expected = 'Task validation failed: description: Cast to string failed for value \"[]\" at path \"description\"'
 
       expect(response.body.message).toEqual(expected)
   })
