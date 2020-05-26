@@ -389,7 +389,7 @@ describe('GET /task/:id', () => {
       .expect(400)
   })
 
-  test('Should return specific error message with invalid ObjectId', async () => {
+  test.skip('Should return specific error message with invalid ObjectId', async () => {
     const response = await request(app)
       .get('/tasks/123456')
       .send()
@@ -451,7 +451,7 @@ describe('PATCH /task/:id', () => {
       expect(response.body).toMatchObject(expected)
   })
 
-  test('Should return specific error message with invalid ObjectId', async () => {
+  test.skip('Should return specific error message with invalid ObjectId', async () => {
     const response = await request(app)
       .patch('/tasks/123456')
       .send({
