@@ -5,14 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/index.js",
-    "dev": "env-cmd -f ./config/dev.env nodemon ./src/index.js",
-    "test": "env-cmd -f ./config/test.env jest --runInBand --watch",
-    "ci-test": "env-cmd -f ./config/test.env jest --runInBand",
-    "coverage": "env-cmd -f ./config/test.env jest --runInBand --coverage"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "verbose": false
+    "dev": "nodemon ./src/index.js",
+    "test": "jest --runInBand --watch",
+    "ci-test": "jest --runInBand",
+    "coverage": "jest --runInBand --coverage"
   },
   "repository": {
     "type": "git",
@@ -33,7 +29,7 @@
     "validator": "^13.1.1"
   },
   "devDependencies": {
-    "env-cmd": "^10.1.0",
+    "dotenv": "^8.2.0",
     "jest": "^26.1.0",
     "nodemon": "^2.0.4",
     "supertest": "^4.0.2"

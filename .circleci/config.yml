@@ -5,6 +5,9 @@ jobs: # a collection of steps
     docker: # run the steps with Docker
       - image: circleci/node:12.11.1 # ...with this image as the primary container; this is where all `steps` will run
       - image: mongo:3.6.4 # and this image as the secondary service container
+    environment:       
+      PORT: $PORT_TESTS
+      JWT_SECRET: $JWT_SECRET
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
       - run:

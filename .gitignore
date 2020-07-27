@@ -1,3 +1,10 @@
+# dependencies
 node_modules/
-.vscode/
+
+# testing
 coverage/
+
+# misc
+.env.development
+.env.test
+.vscode/
