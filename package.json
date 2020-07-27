@@ -7,8 +7,8 @@
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
     "test": "jest --runInBand --watch",
-    "ci-test": "env-cmd -f ./config/test.env jest --runInBand",
-    "coverage": "env-cmd -f ./config/test.env jest --runInBand --coverage"
+    "ci-test": "jest --runInBand",
+    "coverage": "jest --runInBand --coverage"
   },
   "repository": {
     "type": "git",
