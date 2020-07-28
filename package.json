@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
-    "test": "jest --runInBand --watch",
-    "ci-test": "jest --runInBand",
+    "test": "jest --runInBand",
     "coverage": "jest --runInBand --coverage"
   },
   "repository": {
