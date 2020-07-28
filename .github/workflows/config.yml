@@ -27,8 +27,8 @@ jobs:
       - run: npm test
         env:
           CI: true
-          PORT_TESTS: ${{ secrets.PORT_TESTS }}
-          MONGODB_URL_TESTS: ${{ secrets.MONGODB_URL_TESTS }}
+          PORT: ${{ secrets.PORT }}
+          MONGODB_URL: ${{ secrets.MONGODB_URL }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
 
