@@ -22,7 +22,7 @@
   "homepage": "https://github.com/canyener/task-api-kata#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "express": "^4.17.2",
+    "express": "^4.18.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.1",
     "validator": "^13.7.0"
